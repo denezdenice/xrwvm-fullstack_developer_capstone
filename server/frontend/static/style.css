@@ -5,7 +5,7 @@ img{
 
 .card{
   border: rgb(103, 102, 105) 3px solid;
-  display: flex;  
+  display: flex;   
   flex-direction: column;
   margin-left:5%;
   margin-right:5%;
@@ -14,7 +14,7 @@ img{
 }
 
 .row{
-  display: flex;  
+  display: flex;   
   flex: 1;
   flex-direction: row;
   margin: auto;
@@ -43,9 +43,11 @@ img{
 
 .homepage_links{
   color:  rgb(97, 64, 128);
-  padding: 25%;
+  padding: 5px 10px; /* Ancien: 25%. Changé pour un padding plus raisonnable */
   font-size: larger;
-  }
+  cursor: pointer; /* Ajout explicite du curseur pointeur */
+  display: inline-block; /* Pour que le padding fonctionne mieux sur les liens */
+}
 
 .loginlink{
   display: flex;
@@ -122,5 +124,5 @@ img{
     color:#FFF;
     border-radius:50px;
     text-align:center;
-    box-shadow: 2px 2px 3px #999;  
+    box-shadow: 2px 2px 3px #999;   
 }
