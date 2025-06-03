@@ -13,7 +13,8 @@ from django.contrib.auth import login, authenticate
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
-# from .populate import initiate
+from .populate import initiate # Décommenté pour l'utilisation dans get_cars
+from .models import CarMake, CarModel # Importation des modèles CarMake et CarModel
 
 
 # Get an instance of a logger
@@ -77,6 +78,33 @@ def registration(request):
     else :
         data = {"userName":username,"error":"Already Registered"}
         return JsonResponse(data)
+
+# Nouvelle vue pour obtenir la liste des voitures
+def get_cars(request):
+    # Compte le nombre d'objets CarMake dans la base de données.
+    count = CarMake.objects.filter().count()
+    print(count) # Affiche le compte dans la console du serveur
+
+    # Si aucune marque de voiture n'existe (count est 0),
+    # appelle la fonction initiate() pour peupler la base de données.
+    if(count == 0):
+        initiate()
+
+    # Récupère tous les objets CarModel et optimise la requête
+    # en préchargeant les objets CarMake liés (select_related).
+    car_models = CarModel.objects.select_related('car_make')
+
+    # Crée une liste vide pour stocker les données des voitures.
+    cars = []
+
+    # Parcourt chaque CarModel récupéré.
+    for car_model in car_models:
+        # Pour chaque CarModel, ajoute un dictionnaire à la liste 'cars'.
+        # Ce dictionnaire contient le nom du modèle de voiture et le nom de sa marque.
+        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
+    
+    # Retourne la liste des voitures sous forme de réponse JSON.
+    return JsonResponse({"CarModels": cars})
 
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
